@@ -17,7 +17,7 @@
 
 
 	<!-- build:js ../assets/js/core.min.js -->
-	<script src="../libs/bower/jquery/dist/jquery.js"></script>
+	
 	<script src="../libs/bower/jquery-ui/jquery-ui.min.js"></script>
 	<script src="../libs/bower/jQuery-Storage-API/jquery.storageapi.min.js"></script>
 	<script src="../libs/bower/bootstrap-sass/assets/javascripts/bootstrap.js"></script>

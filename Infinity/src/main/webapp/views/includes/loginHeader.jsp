@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="../assets/css/core.css">
 	<link rel="stylesheet" href="../assets/css/misc-pages.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900,300">
+	<script src="../libs/bower/jquery/dist/jquery.js"></script>
 </head>
 <body class="simple-page">
 	<div id="back-to-home">

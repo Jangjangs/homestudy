@@ -16,7 +16,7 @@ String password="bigdata";
 
 StringBuffer qry = new StringBuffer();
 qry.append(" SELECT * FROM big_member WHERE mb_out !='N' ");
-if(keyword != null || "".equals(keyword)){
+if(!(keyword == null || "".equals(keyword))){
 	qry.append(" AND ( mb_name LIKE ? OR mb_email LIKE ? OR mb_phone LIKE ? OR mb_birth LIKE ?) ");
 }
 qry.append(" ORDER BY mb_joindate DESC ");
@@ -34,7 +34,7 @@ try{
 	
 	stmt = conn.prepareStatement(sql);
 	
-	if(keyword != null || !"".equals(keyword)){ //
+	if(!(keyword == null || !"".equals(keyword))){ //
 		stmt.setString(1, "%"+keyword+"%"); //
 		stmt.setString(2, "%"+keyword+"%");
 		stmt.setString(3, "%"+keyword+"%");

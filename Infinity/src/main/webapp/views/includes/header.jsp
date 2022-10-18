@@ -28,6 +28,7 @@ if((sess_id == null || "".equals(sess_id))){
 	<link rel="stylesheet" href="../assets/css/core.css">
 	<link rel="stylesheet" href="../assets/css/app.css">
 	<link rel="stylesheet" href="../assets/css/style.css"> <!-- 공통 css -->
+	
 	<script src="../assets/js/default.js"></script>
 	<!-- endbuild -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900,300">
@@ -35,6 +36,7 @@ if((sess_id == null || "".equals(sess_id))){
 	<script>
 		Breakpoints();
 	</script>
+	<script src="../libs/bower/jquery/dist/jquery.js"></script>
 </head>
 	
 <body class="menubar-top menubar-light theme-primary">
