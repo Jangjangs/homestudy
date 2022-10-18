@@ -99,6 +99,7 @@ try{
 								<th>생년월일</th>
 								<th>성별</th>
 								<th>가입 일자</th>
+								<th>관리</th>
 							</tr>
 <%
 int num = 1;
@@ -117,8 +118,11 @@ int num = 1;
 								<td><%=data.get("mb_birth") %></td>
 								<td><%=data.get("mb_gender") %></td>
 								<td><%=data.get("mb_joindate") %></td>
+								<td><button data-mb_id="<%=data.get("mb_id") %>" class="btn">복구</button></td>
+											<!-- data-* -->
 							</tr>
 <%
+
 	}						
 	
 	if(num == 1){
@@ -126,7 +130,7 @@ int num = 1;
 	
 %>
 							<tr>
-								<td colspan="8">탈퇴된 회원이 없습니다.</td>
+								<td colspan="9">탈퇴된 회원이 없습니다.</td>
 							</tr>
 		
 <%
@@ -139,4 +143,35 @@ int num = 1;
 		</div><!-- .row -->
 	</section><!-- #dash-content -->
 </div><!-- .wrap -->
+<script>
+
+$(document).ready(function(){
+	$('.btn').on("click",function(){
+		console.log("button");
+		let mb_id = $(this).data('mb_id');
+		let pe = $(this).parent().parent();  //tr태그
+	
+		if(confirm('정말로 복구하시겠습니까?')){
+			// ajax 통신
+	        $.ajax({
+	            type : "POST",            // HTTP method type(GET, POST) 형식이다.
+	            url : "../ajax/ajax.memberOutAct.jsp",      // 컨트롤러에서 대기중인 URL 주소이다.
+	            data : {mb_id:mb_id},            // Json 형식의 데이터이다.
+	            success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+	                // 응답코드 > 0000
+	                if(res == 'Success'){
+	                	//location.reload();    //새로고침
+	                	pe.remove();
+	                }
+	               console.log("["+res+"]");
+	            },
+	            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+	                console.log("통신 실패.")
+	            }
+	        });
+		}
+		console.log("[button클릭]"+mb_id);
+	}); 
+}); 
+</script>
  <%@ include file="includes/footer.jsp" %>
