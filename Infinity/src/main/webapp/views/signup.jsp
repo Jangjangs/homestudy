@@ -7,11 +7,13 @@
 	<form method="post" action="signupAct.jsp">
 	
 		<div class="form-group">
-			<input id="sign-up-id" type="text" name="mb_id" class="form-control" placeholder="아이디">
+			<input id="mb_id" type="text" name="mb_id" class="form-control" placeholder="아이디">
+			<p id="idErrMsg"></p>
 		</div>
 		
 		<div class="form-group">
-			<input id="sign-up-password" type="password" name="mb_pw" class="form-control" placeholder="비밀번호">
+			<input id="mb_pw" type="password" name="mb_pw" class="form-control" placeholder="비밀번호">
+			<p id="pwErrMsg"></p>
 		</div>
 		
 		<div class="form-group">
@@ -140,5 +142,81 @@
         // iframe을 넣은 element를 보이게 한다.
         element_wrap.style.display = 'block';
     }
+</script>
+
+<script>
+$(document).ready(function(){
+	//아이디 유효성 체크
+	$('#mb_id').blur(function(){
+		//console.log('블러');
+		let mb_id = $('#mb_id').val().trim();
+		if(mb_id == ''){
+			$('#idErrMsg').text('아이디를 입력하세요');
+			$('#idErrMsg').css('color','red'); 
+			$('#mb_id').focus();
+		} else if(mb_id.length < 6 || mb_id.length > 16){
+			$('#idErrMsg').text('아이디는 6~16글자입니다.');
+			$('#idErrMsg').css('color','red'); 
+			$('#mb_id').focus();
+		} else{
+			$('#idErrMsg').text('');
+		
+		//Ajax를 이용한 아이디 중복 체크
+		//중복된 아이디입니다.
+		//사용가능한 아이디입니다.
+		// ajax 통신
+		 $.ajax({
+	            type : "POST",            // HTTP method type(GET, POST) 형식이다.
+	            url : "../ajax/ajax.idchkAct.jsp",      // 컨트롤러에서 대기중인 URL 주소이다.
+	            data : {mb_id:mb_id},            // Json 형식의 데이터이다.
+	            success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+	                // 응답코드 > 0000
+	                if(res == 'Success'){
+	                	console.log('Success'); //사용가능한 아이디입니다.
+	                	$('#idErrMsg').text('사용가능한 아이디입니다.')
+	                	$('#idErrMsg').css('color','green');
+	                } else{
+	                	console.log('Fail'); //중복된 아이디입니다.
+	                	$('#idErrMsg').text('중복된 아이디입니다.')
+	                	$('#idErrMsg').css('color','red');
+	                	$('#mb_id').focus();
+	                }
+	               //console.log("["+res+"]");
+	            },
+	            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+	                console.log("통신 실패.")
+	            }
+	        });
+		}
+		console.log("idchk:"+mb_id);
+	});
+	
+	//비밀번호 유효성체크
+	$('#mb_pw').keyup(function(){
+		let mb_pw = $('#mb_pw').val().trim();
+		//비밀번호 정규표현식(영문자 숫자 특수문자 각 개 이상 입력)
+		let reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[-_!*@#$%^&])[a-z\d-_!*@#$%^&]{6,16}$/;
+		
+		if(mb_pw == ''){
+			$('#pwErrMsg').text('비밀번호를 입력하세요');
+			$('#pwErrMsg').css('color','red'); 
+			$('#mb_pw').focus();
+		} else if(mb_pw.length < 6 || mb_pw.length > 16){
+			$('#pwErrMsg').text('비밀번호는 6~16글자입니다.');
+			$('#pwErrMsg').css('color','red'); 
+			$('#mb_pw').focus();
+		} else{
+			$('#pwErrMsg').text('');
+			console.log(reg.test(mb_pw));
+			console.log(mb_pw);
+			
+			if(!reg.test(mb_pw)){
+				$('#pwErrMsg').text('영문자, 숫자, 특수문자 각1개 이상을 입력하세요.');
+				$('#pwErrMsg').css('color','red'); 
+			}
+		}
+	});
+});
+
 </script>
 	<%@ include file="includes/loginFooter.jsp" %>

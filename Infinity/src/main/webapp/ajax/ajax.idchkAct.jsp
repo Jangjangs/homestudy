@@ -1,6 +1,7 @@
 <%@page import="java.sql.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page trimDirectiveWhitespaces="true" %>
 <%
 
 //JDBC프로그래밍					   포트번호 DB이름
@@ -9,12 +10,14 @@ String user="root";
 String password="bigdata";
 
 StringBuffer qry = new StringBuffer();
-qry.append(" SELECT * FROM big_member WHERE mb_id = ? AND mb_pw = ? ");
+qry.append(" SELECT count(*) FROM big_member WHERE mb_id = ? ");
 String sql = qry.toString();
 
 Connection conn = null;
 PreparedStatement stmt = null;
 ResultSet rs = null;
+
+String ajaxMessage = "Fail";
 
 try{
 	Class.forName("com.mysql.cj.jdbc.Driver"); //드라이버 로드
@@ -23,19 +26,16 @@ try{
 	stmt = conn.prepareStatement(sql);  //preparedstatement sql문은 여기드감
 
 	stmt.setString(1, request.getParameter("mb_id"));
-	stmt.setString(2, request.getParameter("mb_pw"));
 	
 	rs = stmt.executeQuery();
 	if(rs.next()){
-		//세션 변수 생성 아이디, 이름
-		String sess_id = rs.getString("mb_id");
-		String sess_name = rs.getString("mb_name");
-		session.setAttribute("sess_id", sess_id);
-		session.setAttribute("sess_name", sess_name);
-		
-		response.sendRedirect("dashboard.jsp");
-	} else {
-		response.sendRedirect("login.jsp");
+		//ID 중복체크 중복되면 Fail 안되면 Success
+		int idChk = rs.getInt("count(*)");
+		if(idChk == 0){
+			ajaxMessage = "Success";
+		} else{
+			ajaxMessage = "Fail";
+		}
 	}
 } catch(Exception e) {
 	
@@ -49,7 +49,7 @@ try{
 	}
 }
 
-
+out.print(ajaxMessage);
 %>
 
 
