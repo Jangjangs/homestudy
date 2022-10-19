@@ -17,24 +17,24 @@
 		</div>
 		
 		<div class="form-group">
-			<input id="sign-up-name" type="text" name="mb_name" class="form-control" placeholder="이름">
+			<input id="mb_name" type="text" name="mb_name" class="form-control" placeholder="이름">
 		</div>
 
 		<div class="form-group">
-			<input id="sign-up-email" type="email" name="mb_email" class="form-control" placeholder="이메일">
+			<input id="mb_email" type="email" name="mb_email" class="form-control" placeholder="이메일">
 		</div>
 		
 		<div class="form-group">
-			<input id="sign-up-zipcode" type="text" name="mb_zipcode" class="form-control" placeholder="우편번호">
+			<input id="mb_zipcode" type="text" name="mb_zipcode" class="form-control" placeholder="우편번호">
 			<button type="button" onclick="sample3_execDaumPostcode()">우편번호검색</button>
 		</div>
 		
 		<div class="form-group">
-			<input id="sign-up-addr" type="text" name="mb_addr" class="form-control" placeholder="주소">
+			<input id="mb_addr" type="text" name="mb_addr" class="form-control" placeholder="주소">
 		</div>
 		
 		<div class="form-group">
-			<input id="sign-up-detailAddr" type="text" name="mb_detailAddr" class="form-control" placeholder="상세주소">
+			<input id="mb_detailAddr" type="text" name="mb_detailAddr" class="form-control" placeholder="상세주소">
 		</div>
 		
 		<div id="wrap" style="display:none;border:1px solid;width:100%;height:300px;margin:5px 0;position:relative">
@@ -42,11 +42,11 @@
 		</div>
 		
 		<div class="form-group">
-			<input id="sign-up-phone" type="tel" name="mb_phone" class="form-control" placeholder="연락처">
+			<input id="mb_phone" type="tel" name="mb_phone" class="form-control" placeholder="연락처">
 		</div>
 		
 		<div class="form-group">
-			<input id="sign-up-birthdate" type="number" name="mb_birth" class="form-control" placeholder="생년월일">
+			<input id="mb_birth" type="number" name="mb_birth" class="form-control" placeholder="생년월일">
 		</div>
 		
 		<div class="form-group">
@@ -119,10 +119,10 @@
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('sign-up-zipcode').value = data.zonecode;
-                document.getElementById("sign-up-addr").value = addr;
+                document.getElementById('mb_zipcode').value = data.zonecode;
+                document.getElementById("mb_addr").value = addr;
                 // 커서를 상세주소 필드로 이동한다.
-                document.getElementById("sign-up-detailAddr").focus();
+                document.getElementById("mb_detailAddr").focus();
 
                 // iframe을 넣은 element를 안보이게 한다.
                 // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
@@ -145,6 +145,9 @@
 </script>
 
 <script>
+//pwValidate 가 0이면 회원가입
+var pwValidate = -1;
+
 $(document).ready(function(){
 	//아이디 유효성 체크
 	$('#mb_id').blur(function(){
@@ -197,23 +200,88 @@ $(document).ready(function(){
 		//비밀번호 정규표현식(영문자 숫자 특수문자 각 개 이상 입력)
 		let reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[-_!*@#$%^&])[a-z\d-_!*@#$%^&]{6,16}$/;
 		
+		pwVaildate = -1;
+		
 		if(mb_pw == ''){
 			$('#pwErrMsg').text('비밀번호를 입력하세요');
 			$('#pwErrMsg').css('color','red'); 
-			$('#mb_pw').focus();
 		} else if(mb_pw.length < 6 || mb_pw.length > 16){
 			$('#pwErrMsg').text('비밀번호는 6~16글자입니다.');
 			$('#pwErrMsg').css('color','red'); 
-			$('#mb_pw').focus();
+		} else if(!reg.test(mb_pw)){
+			$('#pwErrMsg').text('영문자, 숫자, 특수문자 각1개 이상을 입력하세요.');
+			$('#pwErrMsg').css('color','red'); 
 		} else{
 			$('#pwErrMsg').text('');
+			pwValidate = 0;
 			console.log(reg.test(mb_pw));
 			console.log(mb_pw);
 			
-			if(!reg.test(mb_pw)){
-				$('#pwErrMsg').text('영문자, 숫자, 특수문자 각1개 이상을 입력하세요.');
-				$('#pwErrMsg').css('color','red'); 
-			}
+			
+		}
+	});
+	
+	$('input [type = submit]').on("click",function(e){
+		e.preventDefault();
+		console.log(pwValidate);
+		
+		let mb_id = $('#mb_id').val().trim();
+		let mb_pw = $('#mb_pw').val().trim();
+		let mb_name = $('#mb_name').val().trim();
+		let mb_email = $('#mb_email').val().trim();
+		let mb_zipcode = $('#mb_zipcode').val().trim();
+		let mb_addr = $('#mb_addr').val().trim();
+		let mb_detailAddr = $('#mb_detailAddr').val().trim();
+		let mb_phone = $('#mb_phone').val().trim();
+		let mb_birth = $('#mb_birth').val().trim();
+		let mb_gender = $('input[name=mb_gender]:checked').val();
+		
+		if(mb_id == ''){
+			$('#idErrMsg').text("아이디를 입력하세요");
+			$('#idErrMsg').css('color','red');
+			$('#mb_id').focus();
+		} else if (mb_pw == '' || pwValidate !=0){
+			$('#pwErrMsg').text("비밀번호를 입력하세요");
+			$('#pwErrMsg').css('color','red');
+			$('#mb_pw').focus();
+			$('#mb_pw').select();  //패스워드 상자안의 글자 전체 선택
+		} else if (mb_name == ''){
+			$('#nameErrMsg').text("이름을 입력하세요");
+			$('#nameErrMsg').css('color','red');
+			$('#mb_name').focus();
+		} else{
+			//$(this).hide();
+			//$(this).addClass("disabled");
+			//$(this).attr("disabled","disabled");  html
+			$(this).prop("disabled", true);   //Javascript
+			$.ajax({
+	            type : "POST",            // HTTP method type(GET, POST) 형식이다.
+	            url : "../ajax/ajax.signupAct.jsp",      // 컨트롤러에서 대기중인 URL 주소이다.
+	            data : {mb_id:mb_id,
+	            	mb_pw:mb_pw,
+	            	mb_name:mb_name,
+	            	mb_email:mb_email,
+	    			mb_zipcode:mb_zipcode,
+	    			mb_addr:mb_addr, 
+	    			mb_detailAddr:mb_detailAddr, 
+	    			mb_phone:mb_phone,
+	    			mb_birth:mb_birth,
+	    			mb_gender:mb_gender},            // Json 형식의 데이터이다.
+	    			
+	            success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+	                // 응답코드 > 0000
+	                if(res == 'Success'){
+	                	location.href="login.jsp"
+	                } else{
+	                	$(this).prop("disabled", false);
+	                	alert("회원가입 실패");
+	                }
+	               //console.log("["+res+"]");
+	            },
+	            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+	                console.log("통신 실패.")
+	            }
+	        });
 		}
 	});
 });

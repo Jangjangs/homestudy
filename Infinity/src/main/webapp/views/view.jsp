@@ -93,8 +93,15 @@
 							</div>
 							<div class="row">
 								<div class="col-sm-4 col-sm-offset-8">
+								<%=sess_id %>/<%=view.get("bo_mb_id") %>
+								<%
+									if(sess_id.equals(view.get("bo_mb_id"))){
+								%>
 									<a href="modify.jsp?bo_num=<%=view.get("bo_num") %>" class="btn btn-success">글수정</a>
 									<a href="javascript:void(0);" class="btn btn-success" onclick="del()">글삭제</a>
+								<%
+									}
+								%>
 									<a href="list.jsp" class="btn btn-success">글목록</a>
 								</div>
 							</div>
