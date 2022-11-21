@@ -167,7 +167,7 @@ function showReplyPage(replyCnt){
 	}
 	
 	$('.pagination').html(str);
-	//console.log(str);
+	console.log(str);
 	
 }
 
@@ -196,7 +196,7 @@ function getList(){
         contentType: "application/json",
         //data : JSON.stringify(data),            // Json 형식의 데이터이다.
         success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다.
-            // 응답코드 > 0000
+            // 응답코드 > 0000 
             let html = "";
            // console.log(res);
             for(let i = 0; i<res.list.length; i++){
@@ -222,6 +222,8 @@ function getList(){
             }
             //console.log(html);
             $("#chat").html(html);
+            
+            showReplyPage(res.replyCnt); //페이징
         },
         error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
             console.log("통신 실패.");
