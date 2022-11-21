@@ -120,7 +120,7 @@ function btn_new(){
 var pageNum = 1;
 
 function showReplyPage(replyCnt){
-	console.log(replyCnt); //<<
+	console.log(replyCnt); //20
 	var endNum = Math.ceil(pageNum / 10.0) * 10;
 	var startNum = endNum - 9;
 	
@@ -167,7 +167,7 @@ function showReplyPage(replyCnt){
 	}
 	
 	$('.pagination').html(str);
-	console.log(str);
+	console.log(str); //<li  class="active" ><a>1</a></li><li><a href = "2" class="btn_pagination">2</a></li>
 	
 }
 
