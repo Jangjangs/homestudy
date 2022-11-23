@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class Criteria {
 	private int pageNum; //현재페이지
-	private int amount;	//보여줄 페이지 수
+	private int amount;	//보여줄 게시글 수
 	
 	private String type;
 	private String keyword;

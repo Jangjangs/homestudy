@@ -18,31 +18,21 @@
 						<col style="width:80px"/>
 						<col style=""/>
 						<col style="width:100px"/>
-						<col style="width:150px"/>
-						<col style="width:150px"/>
-						<col style="width:80px"/>
 						</colgroup>
 							<tr>
 								<th>#번호</th>
 								<th>제목</th>
+								<th>미리보기</th>
 								<th>작성자</th>
-								<th>작성일</th>
-								<th>수정일</th>
-								<th>조회수</th>
 							</tr>
 							<c:set value="0" var="rowCnt"/>
-							<c:forEach items="${list }" var="board">
+							<c:forEach items="${list }" var="report">
 							<tr>
-								<td>${board.bno }</td>
-								<td><a href="get?bno=${board.bno }">${board.title }</a>
-								<c:if test="${board.replyCnt gt 0 }">
-								<span class="badge badge-danger"><c:out value="${board.replyCnt }"></c:out></span>
-								</c:if>
-								</td>
-								<td>${board.writer }</td>
-								<td><fmt:formatDate value="${board.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
-								<td><fmt:formatDate value="${board.updatedate }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-								<td>${board.hit }</td>
+								<td>${report.bno }</td>
+								<td><a href="get?bno=${report.bno }">
+								<fmt:formatDate value="${report.regdate }" pattern="yyyy-MM-dd"/> 업무보고서 제출합니다.</a></td>
+								<td><a href="print?bno=${report.bno }" target="_blank"><i class="fa fa-print"></i></a></td>
+								<td><c:out value="${report.writer }"/></td>
 							</tr>
 							<c:set value="${rowCnt+1 }" var="rowCnt"/>
 							</c:forEach>						

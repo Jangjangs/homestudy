@@ -34,11 +34,7 @@
 							<c:forEach items="${list }" var="board">
 							<tr>
 								<td>${board.bno }</td>
-								<td><a href="get?bno=${board.bno }">${board.title }</a>
-								<c:if test="${board.replyCnt gt 0 }">
-								<span class="badge badge-danger"><c:out value="${board.replyCnt }"></c:out></span>
-								</c:if>
-								</td>
+								<td><a href="get?bno=${board.bno }">${board.title }</a></td>
 								<td>${board.writer }</td>
 								<td><fmt:formatDate value="${board.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
 								<td><fmt:formatDate value="${board.updatedate }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
@@ -77,7 +73,7 @@
 						  <ul class="pagination">
 						  <c:if test="${pageMaker.prev }">
 						    <li>
-						      <a href="${pageMaker.startPage-1 }" aria-label="Previous" class="btn_pagination">
+						      <a href="?pageNum=${pageMaker.startPage-1 }&amount=${pageMaker.cri.amount}&type=${pageMaker.cri.type }&keyword=${pageMaker.cri.keyword}" aria-label="Previous">
 						        <span aria-hidden="true">&laquo;</span>
 						      </a>
 						    </li>
@@ -90,14 +86,14 @@
 						    </c:if>
 						    
 						    <c:if test="${pageMaker.cri.pageNum ne num }">
-						    <li><a href="${num }" class="btn_pagination">
+						    <li><a href="?pageNum=${num }&amount=${pageMaker.cri.amount}&type=${pageMaker.cri.type }&keyword=${pageMaker.cri.keyword}">
 						    	${num}
 						    </a></li>
 						    </c:if>
 						   </c:forEach>
 						    <c:if test="${pageMaker.next }">
 						    <li>
-						      <a href="${pageMaker.endPage+1 }" aria-label="Next" class="btn_pagination">
+						      <a href="?pageNum=${pageMaker.endPage+1 }&amount=${pageMaker.cri.amount}&type=${pageMaker.cri.type }&keyword=${pageMaker.cri.keyword}" aria-label="Next">
 						        <span aria-hidden="true">&raquo;</span>
 						      </a>
 						    </li>
@@ -111,23 +107,4 @@
 			</div>
 		</div><!-- END column -->
 </div>
-<form id ="frm">
-	<input type="text" name="pageNum" value=""> 
-	<input type="text" name="amount" value="${pageMaker.cri.amount}"> 
-	<input type="text" name="type" value="${pageMaker.cri.type}"> 
-	<input type="text" name="keyword" value="${pageMaker.cri.keyword}"> 
-	<button></button>
-	</form>
-	
-<script>
-$(document).ready(function(){
-	$(".btn_pagination").on("click",function(e){
-		e.preventDefault();
-		console.log("BTN"+$(this).attr("href"));
-		let href = $(this).attr("href");
-		$("input[name=pageNum]").val(href);
-		$("#frm").submit();
-	});
-});
-</script>
  <%@ include file="../includes/footer.jsp" %>

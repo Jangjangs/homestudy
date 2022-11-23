@@ -234,6 +234,17 @@
             <li><a href="/admin/board/list"><span class="menu-text">게시판</span></a></li>
           </ul>
         </li>
+        
+        <li class="has-submenu">
+          <a href="javascript:void(0)" class="submenu-toggle">
+            <i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i>
+            <span class="menu-text">업무</span>
+            <i class="menu-caret zmdi zmdi-hc-sm zmdi-chevron-right"></i>
+          </a>
+          <ul class="submenu">
+            <li><a href="/admin/report/list"><span class="menu-text">업무보고서</span></a></li>
+          </ul>
+        </li>
    
       </ul><!-- .app-menu -->
     </div><!-- .menubar-scroll-inner -->

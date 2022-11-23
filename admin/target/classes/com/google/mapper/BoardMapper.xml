@@ -81,4 +81,9 @@ UPDATE tbl_board SET hit=hit+1
 WHERE bno=#{bno}
 
 </update>
+
+<update id="updateReplyCnt">
+	UPDATE tbl_board SET replycnt = replycnt + #{amount}
+	WHERE bno = #{bno}
+</update>
 </mapper>

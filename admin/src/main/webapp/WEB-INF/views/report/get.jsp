@@ -19,35 +19,42 @@
 							</small>
 						</div>
 						<form method="post" class="form-horizontal" action="">
-						<input type="hidden" name="bno" value="${board.bno }">
+						<input type="hidden" name="bno" value="${report.bno }">
+							
+						<% pageContext.setAttribute("newLineChar", "\n"); %>
 							<div class="form-group">
-								<label for="exampleTextInput1" class="col-sm-3 control-label">Title:</label>
+								<label for="textarea1" class="col-sm-3 control-label">업무 내용:</label>
 								<div class="col-sm-9">
-									<c:out value="${board.title}" /> 
+									${fn:replace (report.content, newLineChar, '<br>')}
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="textarea1" class="col-sm-3 control-label">Content:</label>
+								<label for="textarea1" class="col-sm-3 control-label">비고:</label>
 								<div class="col-sm-9">
-								<% pageContext.setAttribute("newLineChar", "\n"); %>
-									${fn:replace (board.content, newLineChar, '<br>')}
+									${fn:replace (report.note, newLineChar, '<br>')}
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="exampleTextInput1" class="col-sm-3 control-label">Writer:</label>
+								<label for="textarea1" class="col-sm-3 control-label">특이사항/건의사항:</label>
 								<div class="col-sm-9">
-									${board.writer} 
+									${fn:replace (report.suggestion, newLineChar, '<br>')}
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="exampleTextInput1" class="col-sm-3 control-label">Regdate:</label>
+								<label for="exampleTextInput1" class="col-sm-3 control-label">작성자:</label>
 								<div class="col-sm-9">
-									<fmt:formatDate value="${board.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/> 
+									${report.writer} 
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exampleTextInput1" class="col-sm-3 control-label">작성일자:</label>
+								<div class="col-sm-9">
+									<fmt:formatDate value="${report.regdate }" pattern="yyyy-MM-dd"/> 
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-sm-9 col-sm-offset-3">
-									<a href="modify?bno=${board.bno }" class="btn btn-success btn-sm">Modify Button</a>
+									<a href="modify?bno=${report.bno }" class="btn btn-success btn-sm">Modify Button</a>
 									<button type="button" id="btn_remove" class="btn btn-success btn-sm">Remove Button</button>
 									<a href="javascript:history.go(-1);" class="btn btn-success btn-sm">List Button</a>
 								</div>
@@ -194,7 +201,7 @@ function getList(){
 	// ajax 통신
     $.ajax({
         type : "GET",            // HTTP method type(GET, POST) 형식이다.
-        url : "/admin/replies/pages/${board.bno}/"+pageNum+".json",      // 컨트롤러에서 대기중인 URL 주소이다.
+        url : "/admin/replies/pages/${report.bno}/"+pageNum+".json",      // 컨트롤러에서 대기중인 URL 주소이다.
         contentType: "application/json",
         //data : JSON.stringify(data),            // Json 형식의 데이터이다.
         success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다.
@@ -267,7 +274,7 @@ $(document).ready(function(){
 	
 	$(document).on("click","#btn_modify",function(){
 		let rno = $('#rno').val();
-		let bno = '${board.bno}';
+		let bno = '${report.bno}';
 		let reply = $("#reply").val();
 		let replyer = $("#replyer").val();
 		
@@ -305,7 +312,7 @@ $(document).ready(function(){
 
 	
 	$(document).on("click","#btn_reply" ,function(){
-		let bno = '${board.bno}';
+		let bno = '${report.bno}';
 		let reply = $("#reply").val();
 		let replyer = $("#replyer").val();
 		
