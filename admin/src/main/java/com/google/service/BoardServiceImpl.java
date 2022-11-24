@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.domain.BoardAttachVO;
 import com.google.domain.BoardVO;
 import com.google.domain.Criteria;
+import com.google.mapper.BoardAttachMapper;
 import com.google.mapper.BoardMapper;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import lombok.AllArgsConstructor;
 public class BoardServiceImpl implements BoardService{
 
 	private BoardMapper mapper;
+	private BoardAttachMapper attachMapper;
 	
 	@Override
 	public List<BoardVO> getList() {
@@ -23,10 +26,19 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.getList();
 	}
 	
+	@Transactional
 	@Override
 	public void register(BoardVO vo) {
-		mapper.insert(vo);
+		mapper.insertLastId(vo);
 		
+		if(vo.getAttachList() == null || vo.getAttachList().size() <= 0) {
+			return;
+		}
+		
+		vo.getAttachList().forEach(attach->{
+			attach.setBno(vo.getBno());
+			attachMapper.insert(attach);
+		});
 	}
 
 	@Override
@@ -56,6 +68,12 @@ public class BoardServiceImpl implements BoardService{
 	public int getListTotal(Criteria cri) {
 		
 		return mapper.getListTotal(cri);
+	}
+
+	@Transactional
+	@Override
+	public List<BoardAttachVO> getAttachList(long bno) {
+		return attachMapper.findByBno(bno);
 	}
 
 
