@@ -47,7 +47,7 @@
 							</div>
 							<!-- 첨부파일 -->
 							<div class="form-group">
-								<div class="col-sm-9 col-sm-offset-3">
+								<div class="col-sm-9 col-sm-offset-1">
 									<label for="uploadFile" class="col-sm-3 control-label">Attach File:</label>
 									<div class="col-sm-9">
 										<input type="file" class="form-control input-sm" name="uploadFile" id="uploadFile" placeholder="uploadFile" required="required" multiple="multiple">
@@ -56,7 +56,7 @@
 							</div>
 							
 							<div class="form-group">
-								<div class="col-sm-9 col-sm-offset-3">
+								<div class="col-sm-9 col-sm-offset-1">
 									<label for="uploadFile" class="col-sm-3 control-label"></label>
 									<div class="col-sm-9 uploadResult">
 										<ul>
@@ -73,7 +73,7 @@
 		</div>
 	</div>
 <script>
-var regex = new RegExp("(.*?)\.(jpg|png|gif|bmp)$"); //정규표현식
+var regex = new RegExp("(.*?)\.(jpg|png|gif|bmp|zip|hwp)$"); //정규표현식
 var maxSize = 1024*1024*5; //5mb
 
 function checkExtension(fileName, fileSize){
@@ -110,11 +110,14 @@ function showUploadFile(uploadResultArr){
 		str += "<span data-realfile='"+fileRealPath+"' data-file='"+fileCallPath+"' data-type='image'>X</span></li>";
 		} else{
 			var fileRealPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
-			
-			str += "<li><a href='../download?fileName=" + fileRealPath + "'>";
-			str += "파일아이콘";
+			str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+			str += "<a href='../download?fileName=" + fileRealPath + "'>";
+			str += "파일아이콘</a>";
 			str += "<span data-realfile='"+fileRealPath+"' data-file='"+fileCallPath+"' data-type='file'>X</span></li>";
 		}
+		
+	
+		
 	});
 	
 	$(".uploadResult ul").append(str); //html
@@ -124,6 +127,23 @@ $(document).ready(function(){
 	
 	$("button[type=submit]").on("click",function(e){
 		e.preventDefault();
+		
+		let title = $("#title").val();
+		let content = $("#content").val();
+		let writer = $("#writer").val();
+		if(title == ''){
+			alert("제목을 입력하세요.");
+			return;
+		}
+		if(content == ''){
+			alert("내용을 입력하세요.");
+			return;
+		}
+		if(writer == ''){
+			alert("작성자를 입력하세요.");
+			return;
+		}
+		
 		let str = "";
 		$(".uploadResult ul li").each(function(i, obj){
 			console.log(obj);

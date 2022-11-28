@@ -23,7 +23,7 @@ public interface BoardMapper {
 	
 	public BoardVO read(long bno);
 	
-	public void delete(long bno);
+	public int delete(long bno);
 	
 	public void update(BoardVO vo);
 	

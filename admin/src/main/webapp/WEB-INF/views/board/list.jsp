@@ -34,7 +34,7 @@
 							<c:forEach items="${list }" var="board">
 							<tr>
 								<td>${board.bno }</td>
-								<td><a href="get?bno=${board.bno }">${board.title }</a>
+								<td><a href="get${pageMaker.cri.listLink }&bno=${board.bno}">${board.title }</a>
 								<c:if test="${board.replyCnt gt 0 }">
 								<span class="badge badge-danger"><c:out value="${board.replyCnt }"></c:out></span>
 								</c:if>

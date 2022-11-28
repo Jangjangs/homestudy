@@ -47,14 +47,30 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.read(bno);
 	}
 	
+	@Transactional
 	@Override
-	public void remove(long bno) {
-		mapper.delete(bno);
+	public boolean remove(long bno) {
+		attachMapper.deleteAll(bno);
+		return mapper.delete(bno) == 1;
 		
 	}
 
+	/**
+	 * 기존에 첨부파일을 전부 삭제하고 다시 등록하는 방식
+	 */
+	@Transactional
 	@Override
 	public void modify(BoardVO vo) {
+		//첨부파일 테이블내용 삭제
+		attachMapper.deleteAll(vo.getBno());
+		//첨부파일이 있으면 등록
+		if(vo.getAttachList() == null || vo.getAttachList().size() <= 0) {
+			return;
+		}
+		vo.getAttachList().forEach(attach->{
+			attach.setBno(vo.getBno());
+			attachMapper.insert(attach);
+		});
 		mapper.update(vo);
 		
 	}
@@ -74,6 +90,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardAttachVO> getAttachList(long bno) {
 		return attachMapper.findByBno(bno);
+		
 	}
 
 

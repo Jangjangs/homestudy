@@ -19,7 +19,12 @@
 							</small>
 						</div>
 						<form method="post" class="form-horizontal" action="">
+						
 						<input type="hidden" name="bno" value="${board.bno }">
+						<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}"> 
+						<input type="hidden" name="amount" value="${pageMaker.cri.amount}"> 
+						<input type="hidden" name="type" value="${pageMaker.cri.type}"> 
+						<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}"> 
 							<div class="form-group">
 								<label for="exampleTextInput1" class="col-sm-3 control-label">Title:</label>
 								<div class="col-sm-9">
@@ -54,6 +59,14 @@
 							</div>
 						</form>
 					</div><!-- .widget-body -->
+					<div class="mail-item">
+						<div style="height:32px; padding-top:6px;">Files</div>
+							<div class="uploadResult">
+								<ul style="display:flex;">
+		
+								</ul>
+							</div>
+					</div>
 				</div><!-- .widget -->
 				
 			<div class="mail-item">
@@ -348,6 +361,41 @@ $(document).ready(function(){
 		pageNum = $(this).attr("href");
 		getList();
 	});
+	
+	var bno = '${board.bno}';
+	$.getJSON("./getAttachList", {bno:bno}, function(arr){
+		//console.log(arr);
+		let str = "";
+		
+		$(arr).each(function(i,attach){
+			var fileRealPath
+			= encodeURIComponent(attach.uploadPath + "/" + attach.uuid + "_" + attach.fileName);
+			
+			//그림파일
+			if(attach.fileType){
+				var fileCallPath 
+					= encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+				
+			
+				str += '<li style="padding:5px;">';
+				str += '<a href="../download?fileName='+fileRealPath+'">';
+				str += '<img src="../display?fileName='+fileCallPath+'">';
+				str += '</a>';
+				str += '</li>';
+				
+			}else{
+				str += '<li style="padding:5px;">';
+				str += '<a href="../download?fileName='+fileRealPath+'">';
+				str += '<img src="/admin/resources/assets/images/attach.png" width="100px;">';
+				str += '</a>';
+				str += '</li>';
+			}
+			
+		});
+		$(".uploadResult ul").html(str);
+	});
 });
+
+
 </script>
  <%@ include file="../includes/footer.jsp" %>
