@@ -7,7 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>/sample/admin</h1>
-<a href="/admin/customLogout">로그아웃</a>
+<h1>Logout Page</h1>
+<form method="post" action="/admin/customLogout">
+<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+<button>로그아웃</button>
+</form>
 </body>
 </html>
