@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -41,8 +42,10 @@ public class BoardController {
 		model.addAttribute("list",service.getList(cri));
 		int total = service.getListTotal(cri);
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
+	
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/register")
 	public void register() {
 		
@@ -68,6 +71,7 @@ public class BoardController {
 	
 	}
 	
+	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/modify")
 	public String modify(BoardVO board, RedirectAttributes rttr) {
 		
@@ -78,8 +82,9 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	@PreAuthorize("principal.username == #writer")
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") long bno, Criteria cri, RedirectAttributes rttr) {
+	public String remove(@RequestParam("bno") long bno, Criteria cri, RedirectAttributes rttr, String writer) {
 		
 		List<BoardAttachVO> attachList = service.getAttachList(bno);
 		

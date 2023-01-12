@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+    <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
  <%@ include file="../includes/header.jsp" %>
  <div class="wrap">
 		<div class="row">
@@ -18,6 +19,7 @@
 							</small>
 						</div>
 						<form id="frm" method="post" class="form-horizontal" action="">
+						<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
 							<div class="form-group">
 								<label for="exampleTextInput1" class="col-sm-3 control-label">Title:</label>
 								<div class="col-sm-9">
@@ -35,7 +37,7 @@
 							<div class="form-group">
 								<label for="exampleTextInput1" class="col-sm-3 control-label">Writer:</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control input-sm" name="writer" id="writer" placeholder="Writer" required="required">
+									<input type="text" class="form-control input-sm" name="writer" id="writer" placeholder="Writer" required="required" readonly="readonly"  value="<sec:authentication property="principal.username"/>">
 								</div>
 							</div>
 							
@@ -50,7 +52,7 @@
 								<div class="col-sm-9 col-sm-offset-1">
 									<label for="uploadFile" class="col-sm-3 control-label">Attach File:</label>
 									<div class="col-sm-9">
-										<input type="file" class="form-control input-sm" name="uploadFile" id="uploadFile" placeholder="uploadFile" required="required" multiple="multiple">
+										<input type="file" class="form-control input-sm" name="uploadFile" id="uploadFile" placeholder="uploadFile" multiple="multiple">
 									</div>
 								</div>
 							</div>
@@ -156,7 +158,9 @@ $(document).ready(function(){
 		$("#frm").append(str).submit();
 	});
 	
-	var cloneObj = $(".uploadDiv").clone();
+	//var cloneObj = $(".uploadDiv").clone();
+		var csrfHeaderName = "${_csrf.headerName}"
+		var csrfTokenValue = "${_csrf.token}";
 	
 	$("input[type=file]").on("change",function(){
 		var formData = new FormData();
@@ -179,12 +183,15 @@ $(document).ready(function(){
 			contentType:false,
 			data:formData,
 			type:"POST",
+			beforeSend:function(xhr){
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			success:function(result){
 				//console.log(result);
 				//alert("Success");
 				
 				//파일선택을 초기화
-				//$(".uploadDiv").html(cloneObj.html());
+				$("#uploadFile").val();
 				
 				
 				//파일 목록 출력
@@ -212,12 +219,15 @@ $(document).ready(function(){
 				},
 				dataType:"text",
 				type:"POST",
+				beforeSend:function(xhr){
+					xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+				},
 				success:function(result){
 					//console.log(result);
 					if("delete" == result){
 						span.parent().remove();
 						
-						$(".uploadDiv").html(cloneObj.html());
+						//$(".uploadDiv").html(cloneObj.html());
 					}
 				}
 			});

@@ -34,16 +34,16 @@
 	<form method="post" action="login">
 	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
 		<div class="form-group">
-			<input id="sign-in-email" type="text" name="username" class="form-control" placeholder="UserName" value="admin">
+			<input id="sign-in-email" type="text" name="username" class="form-control" placeholder="UserName" value="">
 		</div>
 
 		<div class="form-group">
-			<input id="sign-in-password" type="password" name="password" class="form-control" placeholder="Password" value="admin">
+			<input id="sign-in-password" type="password" name="password" class="form-control" placeholder="Password" value="">
 		</div>
 
 		<div class="form-group m-b-xl">
 			<div class="checkbox checkbox-primary">
-				<input type="checkbox" id="keep_me_logged_in"/>
+				<input type="checkbox" name="remember-me" id="keep_me_logged_in"/>
 				<label for="keep_me_logged_in">Keep me signed in</label>
 			</div>
 		</div>

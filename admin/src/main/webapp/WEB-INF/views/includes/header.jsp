@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+    <sec:authorize access="isAnonymous()">
+    	<script>
+    	location.href="/admin/customLogin";
+    	</script>
+    </sec:authorize>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -174,9 +180,14 @@
   <div class="app-user">
     <div class="media">
       <div class="media-left">
+      <sec:authorize access="isAuthenticated()">
         <div class="avatar avatar-md avatar-circle">
           <a href="javascript:void(0)"><img class="img-responsive" src="/resources/assets/images/221.jpg" alt="avatar"/></a>
         </div><!-- .avatar -->
+          </sec:authorize>	
+             <sec:authorize access="isAnonymous()">
+        <a href="/admin/customLogin">로그인</a>
+        </sec:authorize>
       </div>
       <div class="media-body">
         <div class="foldable">
@@ -208,11 +219,14 @@
                 </li>
                 <li role="separator" class="divider"></li>
                 <li>
-                  <a class="text-color" href="logout.html">
+                  <a class="text-color" href="javascript:void(0);$('#logout').submit();">
                     <span class="m-r-xs"><i class="fa fa-power-off"></i></span>
-                    <span>Home</span>
+                    <span>Logout</span>
                   </a>
                 </li>
+                <form id="logout" method="post" action="/admin/customLogout">
+				<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+				</form>
               </ul>
             </li>
           </ul>

@@ -61,17 +61,24 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	@Override
 	public void modify(BoardVO vo) {
+		
+		mapper.update(vo);
+		
 		//첨부파일 테이블내용 삭제
 		attachMapper.deleteAll(vo.getBno());
+				
 		//첨부파일이 있으면 등록
-		if(vo.getAttachList() == null || vo.getAttachList().size() <= 0) {
-			return;
-		}
+				if(vo.getAttachList() == null || vo.getAttachList().size() <= 0) {
+					return;
+				}
+				
+		//첨부파일 테이블내용 삭제
+		attachMapper.deleteAll(vo.getBno());
+		
 		vo.getAttachList().forEach(attach->{
 			attach.setBno(vo.getBno());
 			attachMapper.insert(attach);
 		});
-		mapper.update(vo);
 		
 	}
 
